@@ -4,5 +4,9 @@
   "main": "app.js",
   "repository": "git@github.com:Leonckq/node_project_blog.git",
   "author": "leon <liyang@hosecloud.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "nodemon": "^2.0.4"
+  }
 }
