@@ -5,6 +5,10 @@
   "repository": "git@github.com:Leonckq/node_project_blog.git",
   "author": "leon <liyang@hosecloud.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js",
+    "prd": "cross-env NODE_ENV=production nodemon ./bin/www.js"
+  },
   "devDependencies": {
     "cross-env": "^7.0.2",
     "nodemon": "^2.0.4"
