@@ -7,11 +7,8 @@ const { get, set } = require('./src/db/redis')
 const getCookieExpires = () => {
   const d = new Date()
   d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
-  console.log('d.toGMTString() is ', d.toGMTString())
   return d.toGMTString()
 }
-// session 数据
-const SESSION_DATA = {}
 
 // 处理postData
 const getPostData = req => {
@@ -45,37 +42,25 @@ const serverHandle = (req, res) => {
   res.setHeader('Content-type', 'application/json')
   // 获取 path
   const url = req.url
+  console.log('url', url)
   req.path = url.split('?')[0]
 
   // 解析 query
   req.query = querystring.parse(url.split('?')[1])
+  console.log('req.query', req.query)
 
   // 解析cookie
   req.cookie = {}
   const cookieStr = req.headers.cookie || ''
-  console.log(cookieStr)
   cookieStr.split(';').forEach(item => {
-    if (!item) return
+    if (!item) {
+        return
+    }
     const arr = item.split('=')
-    const value = arr.pop()
-    const key = arr.pop()
-    req.cookie[key] = value
-  })
-
-  // 解析session
-  // let needSetCookie = false
-  // let userId = req.cookie.userid
-  // if (userId) {
-  //   if (!SESSION_DATA[userId]) {
-  //     SESSION_DATA[userId] = {}
-  //   }
-  // } else {
-  //   needSetCookie = true
-  //   userId = `${Date.now()}_${Math.random()}`
-  //   SESSION_DATA[userId] = {}
-  // }
-  // req.session = SESSION_DATA[userId] 
-  // 解析session (使用redis)
+    const key = arr[0].trim()
+    const val = arr[1].trim()
+    req.cookie[key] = val
+})
   let needSetCookie = false
   let userId = req.cookie.userid
   if (!userId) {
@@ -87,7 +72,6 @@ const serverHandle = (req, res) => {
 
   // 获取session
   req.sessionId = userId
-  // console.log('req.sessionId is', userId);
   get(req.sessionId).then(sessionData => {
     if (sessionData === null) {
       // 初始化redis 中的 session值
@@ -96,13 +80,10 @@ const serverHandle = (req, res) => {
     } else {
       req.session = sessionData
     }
-    console.log('req.session', req.session)
     return getPostData(req)
  
   }).then(postData => {
     req.body = postData
-    // console.log('req cookie is', req.cookie)
-    // return
     const blogResult = handleBlogRouter(req, res)
     if (blogResult) {
       blogResult.then(blogData => {
@@ -135,7 +116,7 @@ const serverHandle = (req, res) => {
 }
 
 const setCookie = (res, userId) => {
-  res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
+  res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly; expires=${getCookieExpires()}`)
 }
 
 module.exports = serverHandle

@@ -9,30 +9,8 @@ const handleUserRouter = (req, res) => {
   const url = req.url
   const path = url.split('?')[0]
   //登录
-  if (isGet(method) && path === `${apiUrl}/login`) {
-
-    // let data = ''
-    // return new Promise((resolve, reject) => {
-    //   req.on('data', chunk => {
-    //     data += chunk
-    //   })
-
-    //   req.on('end', () => {
-    //     data = JSON.parse(data)
-    //     req.body = data
-    //     const { username, password } = data
-        
-    //     return login(username, password).then(data => {
-    //       if (data.username) {
-    //         resolve(new SuccessModel())
-    //         // return new SuccessModel()
-    //       }
-    //       reject(new ErrorModel('登录失败'))
-    //       // return new ErrorModel('登录失败')
-    //     })
-    //   })
-    // })
-    const { username, password } = req.query
+  if (isPost(method) && path === `${apiUrl}/login`) {
+    const { username, password } = req.body
     const result = login(username, password)
     return result.then(data => {
       if (data.username) {
@@ -49,7 +27,6 @@ const handleUserRouter = (req, res) => {
   }
 
   if (isGet(method) && path === `${apiUrl}/login-test`) {
-    console.log('req.session---->', req.session)
     if (req.session.username) {
       return Promise.resolve(new SuccessModel({
         session: req.session

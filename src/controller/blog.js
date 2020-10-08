@@ -40,7 +40,7 @@ const newBlog = (blogData = {}) => {
 }
 
 const updateBlog = (id, blogData = {}) => {
-  id = Number(id)
+  // id = Number(id)
   const { title, content } = blogData
   const sql = `
     update blogs set title='${title}', content='${content}' where id=${id};

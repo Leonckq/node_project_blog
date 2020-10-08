@@ -16,14 +16,22 @@ const logincheck = (req) => {
 
 const handleBlogRouter = (req, res) => {
   const method = req.method
-  // const id = req.query.id
+  const id = req.query.id
   const url = req.url
   const path = url.split('?')[0]
 
   //获取博客列表
   if (isGet(method) && path === `${apiUrl}/list`) {
-    const author = req.query && req.query.author || ''
+    let author = req.query && req.query.author || ''
     const keyword = req.query && req.query.keyword || ''
+    if (req.query.isadmin) {
+      const loginCheckRes = logincheck(req)
+      console.log('loginCheckRes--------->', loginCheckRes)
+      if (loginCheckRes) {
+        return loginCheckRes
+      }
+      author = req.session.username
+    }
     const res = getList(author, keyword)
     return res.then(listData => {
       return new SuccessModel(listData)
@@ -39,48 +47,46 @@ const handleBlogRouter = (req, res) => {
 
   // 新建博客
   if (isPost(method) && path === `${apiUrl}/new`) {
-    // req.body.author = '庆儿'
-    let data = ''
-    return new Promise((resolve, reject) => {
-      req.on('data', function (chunk) {
-        // chunk 默认是一个二进制数据，和 data 拼接会自动 toString
-          data += chunk;
-      })
-      req.on('end', () => {
-        console.log(typeof data);
-        data = JSON.parse(data)
-        data.author = '庆儿'
-        req.body = data
-        return newBlog(req.body).then(data => {
-          resolve(new SuccessModel(data))
-          return new SuccessModel(data)
-        })
-      })
+
+    const loginCheckRes = logincheck(req)
+    if (loginCheckRes) {
+      return loginCheckRes
+    }
+
+    req.body.author = req.session.username
+    console.log('req.sessio.username is', req.session.username)
+
+    return newBlog(req.body).then(data => {
+      return new SuccessModel(data)
     })
     
     
   }
 
-  //更新
+  //更新 
   if (isPost(method) && path === `${apiUrl}/update`) {
-    let data = ''
-    return new Promise((resolve, reject) => {
-      req.on('data', chunk => {
-        data += chunk
-      })
-      req.on('end', () => {
-        data = JSON.parse(data)
-        req.body = data
-        return updateBlog(req.query.id, req.body).then(data => {
-          resolve(new SuccessModel(data))
-        })
-      })
+    const loginCheckRes = logincheck(req)
+    if (loginCheckRes) {
+      return loginCheckRes
+    }
+    console.log('req.query', req.query)
+    console.log('id', id)
+    return updateBlog(id, req.body).then(data => {
+      if (data) {
+        return new SuccessModel()
+      } else {
+        return new ErrorModel('更新博客列表失败')
+      }
     })
   }
   if (isPost(method) && path === `${apiUrl}/del`) {
-    let data = ''
+    const loginCheckRes = logincheck(req)
+    if (loginCheckRes) {
+      return loginCheckRes
+    }
+    const author = req.session.username
     console.log(req.query.id)
-    return delBlog(req.query.id, '庆儿').then(res => {
+    return delBlog(req.query.id, author).then(res => {
       if (res) {
         return new SuccessModel()
       }
