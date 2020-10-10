@@ -26,7 +26,6 @@ const handleBlogRouter = (req, res) => {
     const keyword = req.query && req.query.keyword || ''
     if (req.query.isadmin) {
       const loginCheckRes = logincheck(req)
-      console.log('loginCheckRes--------->', loginCheckRes)
       if (loginCheckRes) {
         return loginCheckRes
       }
@@ -54,7 +53,6 @@ const handleBlogRouter = (req, res) => {
     }
 
     req.body.author = req.session.username
-    console.log('req.sessio.username is', req.session.username)
 
     return newBlog(req.body).then(data => {
       return new SuccessModel(data)
@@ -69,8 +67,6 @@ const handleBlogRouter = (req, res) => {
     if (loginCheckRes) {
       return loginCheckRes
     }
-    console.log('req.query', req.query)
-    console.log('id', id)
     return updateBlog(id, req.body).then(data => {
       if (data) {
         return new SuccessModel()
@@ -85,7 +81,6 @@ const handleBlogRouter = (req, res) => {
       return loginCheckRes
     }
     const author = req.session.username
-    console.log(req.query.id)
     return delBlog(req.query.id, author).then(res => {
       if (res) {
         return new SuccessModel()

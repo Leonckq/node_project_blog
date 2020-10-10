@@ -17,7 +17,6 @@ function set (key, val) {
 function get(key) {
   return new Promise((resolve, reject) => {
     redisClient.get(key, (err, val) => {
-      console.log('val--------->', val)
       if (err) {
         reject(err)
         return
