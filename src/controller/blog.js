@@ -1,3 +1,4 @@
+const { default: xss } = require('xss')
 const { exec } = require('../db/mysql')
 
 
@@ -25,10 +26,11 @@ const newBlog = (blogData = {}) => {
   // blogData 是一个博客对象， 包含title， content， author属性
   const { title, content, author } = blogData
   const createTime = Date.now()
+  const newTitle = xss(title)
   const sql = `
     insert into blogs (title, content, author, createtime)
     values
-    ('${title}', '${content}', '${author}', ${createTime});
+    ('${newTitle}', '${content}', '${author}', ${createTime});
   `
   return exec(sql).then(res => {
     // console.log(res);

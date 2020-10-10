@@ -147,6 +147,10 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://npm.ekuaibao.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
 
+commander@^2.20.3:
+  version "2.20.3"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://npm.ekuaibao.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -183,6 +187,10 @@ cross-spawn@^7.0.1:
 crypto-random-string@^2.0.0:
   version "2.0.0"
   resolved "https://npm.ekuaibao.com/crypto-random-string/-/crypto-random-string-2.0.0.tgz#ef2a7a966ec11083388369baa02ebead229b30d5"
+
+cssfilter@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/cssfilter/-/cssfilter-0.0.10.tgz#c6d2672632a2e5c83e013e6864a42ce8defd20ae"
 
 debug@^2.2.0:
   version "2.6.9"
@@ -795,3 +803,10 @@ write-file-atomic@^3.0.0:
 xdg-basedir@^4.0.0:
   version "4.0.0"
   resolved "https://npm.ekuaibao.com/xdg-basedir/-/xdg-basedir-4.0.0.tgz#4bc8d9984403696225ef83a1573cbbcb4e79db13"
+
+xss@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/xss/-/xss-1.0.8.tgz#32feb87feb74b3dcd3d404b7a68ababf10700535"
+  dependencies:
+    commander "^2.20.3"
+    cssfilter "0.0.10"

@@ -18,7 +18,8 @@ function exec(sql) {
     })
   })
 }
-
+const aa = mysql.exe
 module.exports = {
-  exec
+  exec,
+  escape: mysql.escape
 }
